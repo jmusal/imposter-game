@@ -30,3 +30,10 @@ lerna-debug.log*
 
 # OS
 Thumbs.db
+
+# Wrangler / Cloudflare Workers
+wrangler.jsonc
+wrangler.json
+.wrangler/
+dist/wrangler.json
+dist/.assetsignore
