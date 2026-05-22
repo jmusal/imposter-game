@@ -16,20 +16,16 @@ export default function VotingScreen({ gameState, onStateChange }: VotingScreenP
     setVotedPlayers((prev) => new Set([...prev, voterId]));
   };
 
-  const handleFinishVoting = () => {
-    onStateChange(calculateResults(gameState));
-  };
-
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-      <div style={{ width: '100%', maxWidth: '480px' }}>
+      <div style={{ width: '100%', maxWidth: '440px' }}>
 
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <div style={{ fontSize: '40px', marginBottom: '12px' }}>🗳️</div>
-          <h2 style={{ fontSize: '28px', fontWeight: 600, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.3px' }}>
+          <h2 style={{ fontSize: '32px', fontWeight: 500, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.8px' }}>
             Vote
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginTop: '8px', fontWeight: 500 }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '17px', marginTop: '8px', fontWeight: 400 }}>
             Who do you think is the imposter?
           </p>
           <p style={{ color: 'var(--text-dim)', fontSize: '13px', marginTop: '4px' }}>
@@ -41,17 +37,16 @@ export default function VotingScreen({ gameState, onStateChange }: VotingScreenP
           {gameState.players.map((player) => (
             <div key={player.id} style={{
               background: 'var(--surface)',
-              borderRadius: '12px',
-              padding: '16px',
-              border: player.vote !== undefined ? '1px solid rgba(95,201,146,0.3)' : '1px solid var(--border)',
-              boxShadow: 'var(--shadow-card)',
+              borderRadius: '16px',
+              padding: '16px 20px',
+              border: player.vote !== undefined ? '2px solid var(--green)' : '1px solid var(--border)',
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: player.vote === undefined ? '12px' : 0 }}>
-                <span style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                <span style={{ fontSize: '16px', fontWeight: 500, color: 'var(--text-primary)' }}>
                   {player.name}
                 </span>
                 {player.vote !== undefined && (
-                  <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--green)', letterSpacing: '0.3px' }}>
+                  <span style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--green)', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
                     ✓ voted
                   </span>
                 )}
@@ -65,24 +60,24 @@ export default function VotingScreen({ gameState, onStateChange }: VotingScreenP
                       onClick={() => handleVote(player.id, target.id)}
                       style={{
                         padding: '8px 4px',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        borderRadius: '8px',
-                        border: '1px solid var(--border)',
+                        fontSize: '13px',
+                        fontWeight: 500,
+                        borderRadius: '50px',
+                        border: '1.5px solid var(--border)',
                         background: 'var(--surface-2)',
                         color: 'var(--text-secondary)',
                         cursor: 'pointer',
                         transition: 'all 0.15s ease',
                         fontFamily: 'inherit',
-                        letterSpacing: '0.2px',
+                        letterSpacing: '-0.1px',
                       }}
                       onMouseOver={(e) => {
-                        e.currentTarget.style.border = '1px solid var(--accent)';
-                        e.currentTarget.style.color = 'var(--accent)';
-                        e.currentTarget.style.background = 'var(--accent-dim)';
+                        e.currentTarget.style.border = '1.5px solid var(--red)';
+                        e.currentTarget.style.color = 'var(--red)';
+                        e.currentTarget.style.background = 'var(--red-dim)';
                       }}
                       onMouseOut={(e) => {
-                        e.currentTarget.style.border = '1px solid var(--border)';
+                        e.currentTarget.style.border = '1.5px solid var(--border)';
                         e.currentTarget.style.color = 'var(--text-secondary)';
                         e.currentTarget.style.background = 'var(--surface-2)';
                       }}>
@@ -91,8 +86,8 @@ export default function VotingScreen({ gameState, onStateChange }: VotingScreenP
                   ))}
                 </div>
               ) : (
-                <p style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 500 }}>
-                  Voted for <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{gameState.players.find((p) => p.id === player.vote)?.name}</span>
+                <p style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 400 }}>
+                  Voted for <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{gameState.players.find((p) => p.id === player.vote)?.name}</span>
                 </p>
               )}
             </div>
@@ -101,22 +96,22 @@ export default function VotingScreen({ gameState, onStateChange }: VotingScreenP
 
         {allVoted && (
           <button
-            onClick={handleFinishVoting}
+            onClick={() => onStateChange(calculateResults(gameState))}
             style={{
               width: '100%',
-              padding: '18px',
+              padding: '16px',
               fontSize: '16px',
-              fontWeight: 600,
-              borderRadius: '12px',
-              border: '1px solid rgba(95,201,146,0.4)',
-              background: 'rgba(95,201,146,0.12)',
-              color: 'var(--green)',
+              fontWeight: 500,
+              borderRadius: '50px',
+              border: 'none',
+              background: 'var(--text-primary)',
+              color: 'var(--bg)',
               cursor: 'pointer',
-              letterSpacing: '0.3px',
+              letterSpacing: '-0.1px',
               transition: 'opacity 0.15s ease',
               fontFamily: 'inherit',
             }}
-            onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
+            onMouseOver={(e) => (e.currentTarget.style.opacity = '0.75')}
             onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}>
             Reveal Results →
           </button>

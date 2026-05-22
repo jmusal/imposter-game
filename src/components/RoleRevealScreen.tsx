@@ -13,7 +13,8 @@ export default function RoleRevealScreen({ gameState, onStateChange }: RoleRevea
   const currentPlayer = gameState.players[gameState.currentPlayerIndex];
   const playersRevealed = gameState.players.filter((p) => p.hasSeenRole).length;
   const isAllRevealed = playersRevealed === gameState.players.length;
-  const progress = ((playersRevealed) / gameState.players.length) * 100;
+  const progress = (playersRevealed / gameState.players.length) * 100;
+  const isImposter = currentPlayer.isImposter;
 
   const handleRevealRole = () => setRoleRevealed(true);
   const handlePassPhone = () => {
@@ -21,67 +22,63 @@ export default function RoleRevealScreen({ gameState, onStateChange }: RoleRevea
     onStateChange(markRoleAsSeen(gameState));
   };
 
-  const isImposter = currentPlayer.isImposter;
-
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-      <div style={{ width: '100%', maxWidth: '480px' }}>
+      <div style={{ width: '100%', maxWidth: '440px' }}>
 
         {/* Progress */}
-        <div style={{ marginBottom: '32px' }}>
+        <div style={{ marginBottom: '28px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
               Round {gameState.roundNumber}
             </span>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
               {playersRevealed + 1} of {gameState.players.length}
             </span>
           </div>
-          <div style={{ width: '100%', height: '3px', background: 'var(--surface-2)', borderRadius: '2px' }}>
-            <div style={{ width: `${progress}%`, height: '100%', background: 'var(--accent)', borderRadius: '2px', transition: 'width 0.3s ease' }} />
+          <div style={{ width: '100%', height: '3px', background: 'var(--border)', borderRadius: '2px' }}>
+            <div style={{ width: `${progress}%`, height: '100%', background: 'var(--text-primary)', borderRadius: '2px', transition: 'width 0.3s ease' }} />
           </div>
         </div>
 
         {!roleRevealed ? (
-          /* Instruction screen */
-          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '40px 28px', boxShadow: 'var(--shadow-card)', border: '1px solid var(--border)', textAlign: 'center' }}>
-            <p style={{ fontSize: '36px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px', letterSpacing: '-0.5px' }}>
+          <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '48px 32px', border: '1px solid var(--border)', textAlign: 'center' }}>
+            <p style={{ fontSize: '36px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '8px', letterSpacing: '-0.8px' }}>
               {currentPlayer.name}
             </p>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '15px', fontWeight: 500, marginBottom: '40px' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '16px', fontWeight: 400, marginBottom: '40px' }}>
               Make sure no one else is looking
             </p>
             <button
               onClick={handleRevealRole}
               style={{
                 width: '100%',
-                padding: '18px',
+                padding: '16px',
                 fontSize: '16px',
-                fontWeight: 600,
-                borderRadius: '12px',
-                border: '1px solid var(--border-strong)',
-                background: 'rgba(255,255,255,0.08)',
-                color: 'var(--text-primary)',
+                fontWeight: 500,
+                borderRadius: '50px',
+                border: 'none',
+                background: 'var(--text-primary)',
+                color: 'var(--bg)',
                 cursor: 'pointer',
-                letterSpacing: '0.3px',
-                boxShadow: 'var(--shadow-button)',
+                letterSpacing: '-0.1px',
                 transition: 'opacity 0.15s ease',
                 fontFamily: 'inherit',
               }}
-              onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
+              onMouseOver={(e) => (e.currentTarget.style.opacity = '0.75')}
               onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}>
               Reveal My Role
             </button>
           </div>
         ) : (
-          /* Role reveal */
           <>
             <div style={{
-              background: 'var(--surface)',
-              borderRadius: '16px',
-              padding: '36px 28px',
-              boxShadow: 'var(--shadow-card)',
-              border: isImposter ? '1px solid rgba(255,99,99,0.3)' : '1px solid rgba(95,201,146,0.3)',
+              background: isImposter
+                ? 'linear-gradient(135deg, #fff5f5, #ffffff)'
+                : 'linear-gradient(135deg, #f0fff7, #ffffff)',
+              borderRadius: '20px',
+              padding: '40px 28px',
+              border: isImposter ? '2px solid var(--red)' : '2px solid var(--green)',
               textAlign: 'center',
               marginBottom: '16px',
             }}>
@@ -89,25 +86,25 @@ export default function RoleRevealScreen({ gameState, onStateChange }: RoleRevea
 
               {isImposter ? (
                 <>
-                  <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  <p style={{ fontFamily: 'monospace', fontSize: '12px', fontWeight: 500, color: 'var(--red)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '8px' }}>
                     You are the imposter
                   </p>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 500, marginBottom: '28px' }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '15px', fontWeight: 400, marginBottom: '32px' }}>
                     Figure out the secret word by listening carefully.
                   </p>
                   <div style={{ display: 'inline-block' }}>
-                    <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '10px' }}>
+                    <p style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '8px' }}>
                       Your clue
                     </p>
                     <div style={{
-                      background: 'var(--accent-dim)',
-                      border: '1px solid rgba(255,99,99,0.3)',
-                      borderRadius: '10px',
-                      padding: '14px 32px',
-                      fontSize: '26px',
-                      fontWeight: 700,
-                      color: 'var(--accent)',
-                      letterSpacing: '0.5px',
+                      background: 'var(--red-dim)',
+                      border: '2px solid var(--red)',
+                      borderRadius: '16px',
+                      padding: '16px 36px',
+                      fontSize: '28px',
+                      fontWeight: 500,
+                      color: 'var(--red)',
+                      letterSpacing: '-0.5px',
                     }}>
                       {gameState.categoryHint}
                     </div>
@@ -115,25 +112,25 @@ export default function RoleRevealScreen({ gameState, onStateChange }: RoleRevea
                 </>
               ) : (
                 <>
-                  <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--green)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  <p style={{ fontFamily: 'monospace', fontSize: '12px', fontWeight: 500, color: 'var(--green)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '8px' }}>
                     Regular Player
                   </p>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 500, marginBottom: '28px' }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '15px', fontWeight: 400, marginBottom: '32px' }}>
                     Give clues without saying the word. Find the imposter!
                   </p>
                   <div>
-                    <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '10px' }}>
+                    <p style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '8px' }}>
                       Secret word
                     </p>
                     <div style={{
-                      background: 'rgba(95,201,146,0.1)',
-                      border: '1px solid rgba(95,201,146,0.3)',
-                      borderRadius: '10px',
-                      padding: '14px 32px',
-                      fontSize: '30px',
-                      fontWeight: 700,
+                      background: 'var(--green-dim)',
+                      border: '2px solid var(--green)',
+                      borderRadius: '16px',
+                      padding: '16px 36px',
+                      fontSize: '32px',
+                      fontWeight: 500,
                       color: 'var(--green)',
-                      letterSpacing: '0.5px',
+                      letterSpacing: '-0.8px',
                     }}>
                       {gameState.secretWord}
                     </div>
@@ -146,20 +143,19 @@ export default function RoleRevealScreen({ gameState, onStateChange }: RoleRevea
               onClick={handlePassPhone}
               style={{
                 width: '100%',
-                padding: '18px',
+                padding: '16px',
                 fontSize: '16px',
-                fontWeight: 600,
-                borderRadius: '12px',
-                border: '1px solid var(--border-strong)',
-                background: 'rgba(255,255,255,0.08)',
+                fontWeight: 500,
+                borderRadius: '50px',
+                border: '1.5px solid var(--border-strong)',
+                background: 'var(--surface)',
                 color: 'var(--text-primary)',
                 cursor: 'pointer',
-                letterSpacing: '0.3px',
-                boxShadow: 'var(--shadow-button)',
+                letterSpacing: '-0.1px',
                 transition: 'opacity 0.15s ease',
                 fontFamily: 'inherit',
               }}
-              onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
+              onMouseOver={(e) => (e.currentTarget.style.opacity = '0.75')}
               onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}>
               {isAllRevealed ? 'Start Round →' : `Pass to ${gameState.players[gameState.currentPlayerIndex + 1]?.name ?? 'Next Player'}`}
             </button>

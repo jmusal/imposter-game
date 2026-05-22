@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import type { GameState } from '../types/game';
 import { getCategoryNames } from '../data/wordBank';
+import { useState } from 'react';
 
 interface ResultsScreenProps {
   gameState: GameState;
@@ -33,63 +33,57 @@ export default function ResultsScreen({ gameState, onNextRound }: ResultsScreenP
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-      <div style={{ width: '100%', maxWidth: '480px' }}>
+      <div style={{ width: '100%', maxWidth: '440px' }}>
 
         {/* Result banner */}
         <div style={{
-          background: 'var(--surface)',
-          borderRadius: '16px',
-          padding: '32px 24px',
+          background: impostersFound
+            ? 'linear-gradient(135deg, #f0fff7, #ffffff)'
+            : 'linear-gradient(135deg, #fff5f5, #ffffff)',
+          borderRadius: '20px',
+          padding: '36px 24px',
           textAlign: 'center',
-          boxShadow: 'var(--shadow-card)',
-          border: impostersFound ? '1px solid rgba(95,201,146,0.3)' : '1px solid rgba(255,99,99,0.3)',
+          border: impostersFound ? '2px solid var(--green)' : '2px solid var(--red)',
           marginBottom: '12px',
         }}>
           <div style={{ fontSize: '48px', marginBottom: '12px' }}>{impostersFound ? '🎉' : '😈'}</div>
           <p style={{
-            fontSize: '13px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase',
-            color: impostersFound ? 'var(--green)' : 'var(--accent)',
+            fontFamily: 'monospace', fontSize: '12px', fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase',
+            color: impostersFound ? 'var(--green)' : 'var(--red)',
             marginBottom: '6px',
           }}>
             {impostersFound ? 'Players Win' : 'Imposter Wins'}
           </p>
-          <p style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '16px' }}>
+          <p style={{ fontSize: '18px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '20px', letterSpacing: '-0.2px' }}>
             {votedOutPlayer ? `${votedOutPlayer.name} was voted out` : 'No consensus'}
           </p>
 
-          {/* Secret word */}
-          <div style={{ display: 'inline-block', background: 'var(--surface-2)', borderRadius: '10px', padding: '10px 24px' }}>
-            <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '4px' }}>
+          <div style={{ display: 'inline-block', background: 'var(--surface-2)', borderRadius: '16px', padding: '12px 28px' }}>
+            <p style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '4px' }}>
               The word was
             </p>
-            <p style={{ fontSize: '28px', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>
+            <p style={{ fontSize: '28px', fontWeight: 500, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
               {gameState.secretWord}
             </p>
           </div>
         </div>
 
         {/* Imposters reveal */}
-        <div style={{
-          background: 'var(--surface)',
-          borderRadius: '14px',
-          padding: '18px 20px',
-          boxShadow: 'var(--shadow-card)',
-          border: '1px solid var(--border)',
-          marginBottom: '12px',
-        }}>
-          <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '12px' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '18px 20px', border: '1px solid var(--border)', marginBottom: '12px' }}>
+          <span style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
             The imposters were
-          </p>
+          </span>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {imposters.map((p) => (
               <span key={p.id} style={{
                 padding: '6px 14px',
-                background: 'var(--accent-dim)',
-                border: '1px solid rgba(255,99,99,0.3)',
-                borderRadius: '8px',
+                background: 'var(--red-dim)',
+                border: '1.5px solid var(--red)',
+                borderRadius: '50px',
                 fontSize: '13px',
-                fontWeight: 600,
-                color: 'var(--accent)',
+                fontWeight: 500,
+                color: 'var(--red)',
+                letterSpacing: '-0.1px',
               }}>
                 🕵️ {p.name}
               </span>
@@ -98,17 +92,10 @@ export default function ResultsScreen({ gameState, onNextRound }: ResultsScreenP
         </div>
 
         {/* Scores */}
-        <div style={{
-          background: 'var(--surface)',
-          borderRadius: '14px',
-          padding: '18px 20px',
-          boxShadow: 'var(--shadow-card)',
-          border: '1px solid var(--border)',
-          marginBottom: '16px',
-        }}>
-          <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '12px' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '18px 20px', border: '1px solid var(--border)', marginBottom: '16px' }}>
+          <span style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
             Scores
-          </p>
+          </span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {sortedScores.map(({ player, score }, idx) => (
               <div key={player!.id} style={{
@@ -116,18 +103,18 @@ export default function ResultsScreen({ gameState, onNextRound }: ResultsScreenP
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '10px 14px',
-                background: idx === 0 ? 'rgba(255,188,51,0.08)' : 'var(--surface-2)',
-                borderRadius: '8px',
-                border: idx === 0 ? '1px solid rgba(255,188,51,0.2)' : '1px solid transparent',
+                background: idx === 0 ? 'rgba(255,196,71,0.1)' : 'var(--surface-2)',
+                borderRadius: '12px',
+                border: idx === 0 ? '1.5px solid rgba(255,196,71,0.3)' : '1.5px solid transparent',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span style={{ fontSize: '18px' }}>
                     {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '·'}
                   </span>
-                  <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>{player!.name}</span>
-                  {player!.isImposter && <span style={{ fontSize: '11px', color: 'var(--accent)', fontWeight: 600 }}>imposter</span>}
+                  <span style={{ fontSize: '15px', fontWeight: 500, color: 'var(--text-primary)' }}>{player!.name}</span>
+                  {player!.isImposter && <span style={{ fontFamily: 'monospace', fontSize: '10px', color: 'var(--red)', fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase' }}>imposter</span>}
                 </div>
-                <span style={{ fontSize: '15px', fontWeight: 700, color: idx === 0 ? '#ffbc33' : 'var(--text-secondary)' }}>
+                <span style={{ fontSize: '15px', fontWeight: 500, color: idx === 0 ? '#c88600' : 'var(--text-secondary)' }}>
                   {score} pts
                 </span>
               </div>
@@ -136,32 +123,25 @@ export default function ResultsScreen({ gameState, onNextRound }: ResultsScreenP
         </div>
 
         {/* Next round */}
-        <div style={{
-          background: 'var(--surface)',
-          borderRadius: '14px',
-          padding: '20px',
-          boxShadow: 'var(--shadow-card)',
-          border: '1px solid var(--border)',
-          marginBottom: '12px',
-        }}>
-          <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '10px' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '20px', border: '1px solid var(--border)', marginBottom: '12px' }}>
+          <span style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>
             Next category
-          </p>
+          </span>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             style={{
               width: '100%',
-              padding: '12px 14px',
+              padding: '12px 16px',
               background: 'var(--surface-2)',
-              border: '1px solid var(--border)',
-              borderRadius: '8px',
+              border: '1.5px solid var(--border)',
+              borderRadius: '12px',
               color: 'var(--text-primary)',
               fontSize: '15px',
-              fontWeight: 500,
+              fontWeight: 400,
               fontFamily: 'inherit',
               outline: 'none',
-              letterSpacing: '0.2px',
+              letterSpacing: '-0.1px',
               cursor: 'pointer',
             }}>
             {getCategoryNames().map((cat) => (
@@ -174,25 +154,24 @@ export default function ResultsScreen({ gameState, onNextRound }: ResultsScreenP
           onClick={() => onNextRound(selectedCategory)}
           style={{
             width: '100%',
-            padding: '18px',
+            padding: '16px',
             fontSize: '16px',
-            fontWeight: 600,
-            borderRadius: '12px',
-            border: '1px solid var(--border-strong)',
-            background: 'rgba(255,255,255,0.08)',
-            color: 'var(--text-primary)',
+            fontWeight: 500,
+            borderRadius: '50px',
+            border: 'none',
+            background: 'var(--text-primary)',
+            color: 'var(--bg)',
             cursor: 'pointer',
-            letterSpacing: '0.3px',
-            boxShadow: 'var(--shadow-button)',
+            letterSpacing: '-0.1px',
             transition: 'opacity 0.15s ease',
             fontFamily: 'inherit',
           }}
-          onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
+          onMouseOver={(e) => (e.currentTarget.style.opacity = '0.75')}
           onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}>
           Play Again →
         </button>
 
-        <p style={{ textAlign: 'center', color: 'var(--text-dim)', fontSize: '12px', marginTop: '16px' }}>
+        <p style={{ textAlign: 'center', color: 'var(--text-dim)', fontSize: '13px', marginTop: '16px' }}>
           Round {gameState.roundNumber} complete
         </p>
       </div>

@@ -39,68 +39,51 @@ export default function ClueRoundScreen({ gameState, onStateChange }: ClueRoundS
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-      <div style={{ width: '100%', maxWidth: '480px' }}>
+      <div style={{ width: '100%', maxWidth: '440px' }}>
+
+        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+          <span style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
+            Round {gameState.roundNumber} — Give your clues
+          </span>
+        </div>
 
         {/* Timer */}
-        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-          <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '16px' }}>
-            Round {gameState.roundNumber} — Give your clues
-          </p>
+        <div style={{
+          textAlign: 'center',
+          padding: '20px',
+          background: isWarning ? 'var(--red-dim)' : 'var(--surface)',
+          borderRadius: '20px',
+          border: isWarning ? '2px solid var(--red)' : '1px solid var(--border)',
+          marginBottom: '16px',
+        }}>
           <div style={{
-            display: 'inline-block',
-            padding: '16px 40px',
-            borderRadius: '14px',
-            background: isWarning ? 'var(--accent-dim)' : 'var(--surface)',
-            border: isWarning ? '1px solid rgba(255,99,99,0.3)' : '1px solid var(--border)',
-            boxShadow: 'var(--shadow-card)',
             fontSize: '52px',
-            fontWeight: 700,
-            color: isWarning ? 'var(--accent)' : 'var(--text-primary)',
+            fontWeight: 500,
+            color: isWarning ? 'var(--red)' : 'var(--text-primary)',
             fontVariantNumeric: 'tabular-nums',
-            letterSpacing: '-1px',
-            transition: 'all 0.3s ease',
+            letterSpacing: '-2px',
+            lineHeight: 1,
           }}>
             {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
           </div>
-          {/* Timer progress bar */}
-          <div style={{ width: '100%', height: '3px', background: 'var(--surface-2)', borderRadius: '2px', marginTop: '16px' }}>
-            <div style={{
-              width: `${progress}%`,
-              height: '100%',
-              background: isWarning ? 'var(--accent)' : 'var(--blue)',
-              borderRadius: '2px',
-              transition: 'width 1s linear',
-            }} />
+          <div style={{ width: '100%', height: '3px', background: 'var(--border)', borderRadius: '2px', marginTop: '16px' }}>
+            <div style={{ width: `${progress}%`, height: '100%', background: isWarning ? 'var(--red)' : 'var(--text-primary)', borderRadius: '2px', transition: 'width 1s linear' }} />
           </div>
         </div>
 
         {/* Clue history */}
-        <div style={{
-          background: 'var(--surface)',
-          borderRadius: '14px',
-          padding: '20px',
-          boxShadow: 'var(--shadow-card)',
-          border: '1px solid var(--border)',
-          marginBottom: '16px',
-          maxHeight: '220px',
-          overflowY: 'auto',
-        }}>
-          <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '12px' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '20px', border: '1px solid var(--border)', marginBottom: '12px', maxHeight: '240px', overflowY: 'auto' }}>
+          <span style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
             Clues ({gameState.clues.length})
-          </p>
+          </span>
           {gameState.clues.length === 0 ? (
-            <p style={{ color: 'var(--text-dim)', fontSize: '14px', fontStyle: 'italic' }}>No clues yet...</p>
+            <p style={{ color: 'var(--text-dim)', fontSize: '15px', fontStyle: 'italic' }}>No clues yet...</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {gameState.clues.map((clue, idx) => (
-                <div key={idx} style={{
-                  padding: '10px 14px',
-                  background: 'var(--surface-2)',
-                  borderRadius: '8px',
-                  borderLeft: '2px solid var(--accent)',
-                }}>
-                  <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-dim)', marginRight: '8px' }}>{clue.playerName}</span>
-                  <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-primary)' }}>{clue.clue}</span>
+                <div key={idx} style={{ padding: '10px 14px', background: 'var(--surface-2)', borderRadius: '12px' }}>
+                  <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-dim)', marginRight: '8px', fontFamily: 'monospace', letterSpacing: '0.3px', textTransform: 'uppercase' }}>{clue.playerName}</span>
+                  <span style={{ fontSize: '15px', fontWeight: 400, color: 'var(--text-primary)' }}>{clue.clue}</span>
                 </div>
               ))}
             </div>
@@ -108,17 +91,10 @@ export default function ClueRoundScreen({ gameState, onStateChange }: ClueRoundS
         </div>
 
         {/* Clue input */}
-        <div style={{
-          background: 'var(--surface)',
-          borderRadius: '14px',
-          padding: '20px',
-          boxShadow: 'var(--shadow-card)',
-          border: '1px solid var(--border)',
-          marginBottom: '12px',
-        }}>
-          <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '10px' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '20px', border: '1px solid var(--border)', marginBottom: '12px' }}>
+          <span style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 500, color: 'var(--text-dim)', letterSpacing: '0.6px', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>
             Add a clue
-          </p>
+          </span>
           <div style={{ display: 'flex', gap: '8px' }}>
             <input
               type="text"
@@ -129,67 +105,60 @@ export default function ClueRoundScreen({ gameState, onStateChange }: ClueRoundS
               maxLength={20}
               style={{
                 flex: 1,
-                padding: '12px 14px',
+                padding: '12px 16px',
                 background: 'var(--surface-2)',
-                border: '1px solid var(--border)',
-                borderRadius: '8px',
+                border: '1.5px solid var(--border)',
+                borderRadius: '12px',
                 color: 'var(--text-primary)',
-                fontSize: '15px',
-                fontWeight: 500,
+                fontSize: '16px',
+                fontWeight: 400,
                 fontFamily: 'inherit',
                 outline: 'none',
-                letterSpacing: '0.2px',
+                letterSpacing: '-0.1px',
               }}
-              onFocus={(e) => {
-                e.target.style.border = '1px solid var(--border-strong)';
-                e.target.style.boxShadow = '0 0 0 3px var(--blue-dim)';
-              }}
-              onBlur={(e) => {
-                e.target.style.border = '1px solid var(--border)';
-                e.target.style.boxShadow = 'none';
-              }}
+              onFocus={(e) => { e.target.style.border = '1.5px dashed var(--text-primary)'; }}
+              onBlur={(e) => { e.target.style.border = '1.5px solid var(--border)'; }}
             />
             <button
               onClick={handleAddClue}
               style={{
-                padding: '12px 20px',
-                fontSize: '14px',
-                fontWeight: 600,
-                borderRadius: '8px',
-                border: '1px solid var(--border-strong)',
-                background: 'rgba(255,255,255,0.08)',
-                color: 'var(--text-primary)',
+                padding: '12px 22px',
+                fontSize: '15px',
+                fontWeight: 500,
+                borderRadius: '50px',
+                border: 'none',
+                background: 'var(--text-primary)',
+                color: 'var(--bg)',
                 cursor: 'pointer',
-                boxShadow: 'var(--shadow-button)',
                 transition: 'opacity 0.15s ease',
                 fontFamily: 'inherit',
+                letterSpacing: '-0.1px',
                 whiteSpace: 'nowrap',
               }}
-              onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
+              onMouseOver={(e) => (e.currentTarget.style.opacity = '0.75')}
               onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}>
               Add
             </button>
           </div>
         </div>
 
-        {/* End round */}
         <button
           onClick={() => onStateChange(moveToVoting(gameState))}
           style={{
             width: '100%',
-            padding: '16px',
+            padding: '14px',
             fontSize: '15px',
-            fontWeight: 600,
-            borderRadius: '12px',
-            border: '1px solid rgba(255,99,99,0.3)',
-            background: 'var(--accent-dim)',
-            color: 'var(--accent)',
+            fontWeight: 500,
+            borderRadius: '50px',
+            border: '1.5px solid var(--red)',
+            background: 'var(--red-dim)',
+            color: 'var(--red)',
             cursor: 'pointer',
-            letterSpacing: '0.3px',
+            letterSpacing: '-0.1px',
             transition: 'opacity 0.15s ease',
             fontFamily: 'inherit',
           }}
-          onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
+          onMouseOver={(e) => (e.currentTarget.style.opacity = '0.75')}
           onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}>
           End Round & Vote
         </button>
