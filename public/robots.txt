@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /
+
+# Optional: Be explicit about specific bots
+User-agent: Googlebot
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
