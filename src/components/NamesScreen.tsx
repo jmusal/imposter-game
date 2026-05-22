@@ -18,48 +18,85 @@ export default function NamesScreen({ settings, onNamesSubmit }: NamesScreenProp
   };
 
   const handleSubmit = () => {
-    const filledNames = names.map((n) => n.trim() || `Player ${names.indexOf(n) + 1}`);
+    const filledNames = names.map((n, i) => n.trim() || `Player ${i + 1}`);
     onNamesSubmit(filledNames);
   };
 
-  const allFilled = names.every((n) => n.trim().length > 0);
-
   return (
-    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full">
-      <h2 className="text-3xl font-bold text-center text-purple-700 mb-8">Enter Player Names</h2>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+      <div style={{ width: '100%', maxWidth: '480px' }}>
 
-      <p className="text-center text-gray-600 mb-6">
-        Give each player a name so we know who's who!
-      </p>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <h2 style={{ fontSize: '28px', fontWeight: 600, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.3px' }}>
+            Who's playing?
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginTop: '8px', fontWeight: 500 }}>
+            {settings.playerCount} players · {settings.imposterCount} imposter{settings.imposterCount > 1 ? 's' : ''} · {settings.category}
+          </p>
+        </div>
 
-      <div className="space-y-3 mb-8">
-        {names.map((name, index) => (
-          <div key={index}>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Player {index + 1}
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => handleNameChange(index, e.target.value)}
-              placeholder={`Enter name for Player ${index + 1}`}
-              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-lg focus:outline-none focus:border-purple-500"
-            />
+        <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '28px', boxShadow: 'var(--shadow-card)', border: '1px solid var(--border)', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '28px' }}>
+            {names.map((name, index) => (
+              <div key={index}>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  Player {index + 1}
+                </label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => handleNameChange(index, e.target.value)}
+                  placeholder={`Player ${index + 1}`}
+                  style={{
+                    width: '100%',
+                    padding: '12px 14px',
+                    background: 'var(--surface-2)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '8px',
+                    color: 'var(--text-primary)',
+                    fontSize: '15px',
+                    fontWeight: 500,
+                    fontFamily: 'inherit',
+                    outline: 'none',
+                    letterSpacing: '0.2px',
+                    boxSizing: 'border-box',
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.border = '1px solid var(--border-strong)';
+                    e.target.style.boxShadow = '0 0 0 3px var(--blue-dim)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.border = '1px solid var(--border)';
+                    e.target.style.boxShadow = 'none';
+                  }}
+                />
+              </div>
+            ))}
           </div>
-        ))}
+
+          <button
+            onClick={handleSubmit}
+            style={{
+              width: '100%',
+              padding: '16px',
+              fontSize: '16px',
+              fontWeight: 600,
+              borderRadius: '12px',
+              border: '1px solid var(--border-strong)',
+              background: 'rgba(255,255,255,0.08)',
+              color: 'var(--text-primary)',
+              cursor: 'pointer',
+              letterSpacing: '0.3px',
+              boxShadow: 'var(--shadow-button)',
+              transition: 'opacity 0.15s ease',
+              fontFamily: 'inherit',
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
+            onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}>
+            Continue →
+          </button>
+        </div>
       </div>
-
-      <button
-        onClick={handleSubmit}
-        disabled={!allFilled}
-        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xl font-bold py-4 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Continue to Game
-      </button>
-
-      <p className="text-center text-gray-600 text-sm mt-6">
-        💡 You can skip and use default names if you prefer
-      </p>
     </div>
   );
 }

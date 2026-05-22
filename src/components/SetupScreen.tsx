@@ -10,108 +10,132 @@ export default function SetupScreen({ onStartGame }: SetupScreenProps) {
   const [playerCount, setPlayerCount] = useState(5);
   const [imposterCount, setImposterCount] = useState(1);
   const [category, setCategory] = useState(getCategoryNames()[0]);
-  const [roundDuration, setRoundDuration] = useState(300); // 5 minutes
+  const [roundDuration, setRoundDuration] = useState(300);
 
   const handleStart = () => {
-    onStartGame({
-      playerCount,
-      imposterCount,
-      category,
-      roundDuration,
-    });
+    onStartGame({ playerCount, imposterCount, category, roundDuration });
   };
 
+  const categories = getCategoryNames();
+
   return (
-    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full">
-      <h1 className="text-4xl font-bold text-center text-purple-700 mb-8">🕵️ Imposter Game</h1>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+      <div style={{ width: '100%', maxWidth: '480px' }}>
 
-      <div className="space-y-6">
-        {/* Player Count */}
-        <div>
-          <label className="block text-lg font-semibold text-gray-800 mb-3">
-            Number of Players: <span className="text-purple-600">{playerCount}</span>
-          </label>
-          <input
-            type="range"
-            min="3"
-            max="8"
-            value={playerCount}
-            onChange={(e) => setPlayerCount(Number(e.target.value))}
-            className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-          />
-          <div className="flex justify-between text-sm text-gray-600 mt-2">
-            <span>3</span>
-            <span>8</span>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ fontSize: '48px', marginBottom: '12px' }}>🕵️</div>
+          <h1 style={{ fontSize: '32px', fontWeight: 600, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.5px', lineHeight: 1.1 }}>
+            Imposter Game
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginTop: '8px', fontWeight: 500 }}>
+            One of you doesn't know the word.
+          </p>
+        </div>
+
+        {/* Card */}
+        <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '28px', boxShadow: 'var(--shadow-card)', border: '1px solid var(--border)' }}>
+
+          {/* Players */}
+          <div style={{ marginBottom: '28px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '12px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '0.3px', textTransform: 'uppercase' }}>
+                Players
+              </span>
+              <span style={{ fontSize: '24px', fontWeight: 600, color: 'var(--text-primary)' }}>{playerCount}</span>
+            </div>
+            <input type="range" min="3" max="8" value={playerCount}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setPlayerCount(val);
+                if (imposterCount >= Math.floor(val / 2)) setImposterCount(Math.max(1, Math.floor(val / 2) - 1));
+              }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px' }}>
+              <span>3</span><span>8</span>
+            </div>
           </div>
-        </div>
 
-        {/* Imposter Count */}
-        <div>
-          <label className="block text-lg font-semibold text-gray-800 mb-3">
-            Number of Imposters: <span className="text-purple-600">{imposterCount}</span>
-          </label>
-          <input
-            type="range"
-            min="1"
-            max={Math.floor(playerCount / 2)}
-            value={imposterCount}
-            onChange={(e) => setImposterCount(Number(e.target.value))}
-            className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-          />
-          <div className="flex justify-between text-sm text-gray-600 mt-2">
-            <span>1</span>
-            <span>{Math.floor(playerCount / 2)}</span>
+          {/* Imposters */}
+          <div style={{ marginBottom: '28px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '12px' }}>
+              <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '0.3px', textTransform: 'uppercase' }}>
+                Imposters
+              </label>
+              <span style={{ fontSize: '24px', fontWeight: 600, color: 'var(--accent)' }}>{imposterCount}</span>
+            </div>
+            <input type="range" min="1" max={Math.max(1, Math.floor(playerCount / 2) - 1)} value={imposterCount}
+              onChange={(e) => setImposterCount(Number(e.target.value))}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px' }}>
+              <span>1</span><span>{Math.max(1, Math.floor(playerCount / 2) - 1)}</span>
+            </div>
           </div>
-        </div>
 
-        {/* Round Duration */}
-        <div>
-          <label className="block text-lg font-semibold text-gray-800 mb-3">
-            Round Duration: <span className="text-purple-600">{Math.floor(roundDuration / 60)}m</span>
-          </label>
-          <input
-            type="range"
-            min="60"
-            max="600"
-            step="60"
-            value={roundDuration}
-            onChange={(e) => setRoundDuration(Number(e.target.value))}
-            className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-          />
-          <div className="flex justify-between text-sm text-gray-600 mt-2">
-            <span>1m</span>
-            <span>10m</span>
+          {/* Round Duration */}
+          <div style={{ marginBottom: '28px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '12px' }}>
+              <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '0.3px', textTransform: 'uppercase' }}>
+                Round Duration
+              </label>
+              <span style={{ fontSize: '24px', fontWeight: 600, color: 'var(--text-primary)' }}>{Math.floor(roundDuration / 60)}m</span>
+            </div>
+            <input type="range" min="60" max="600" step="60" value={roundDuration}
+              onChange={(e) => setRoundDuration(Number(e.target.value))}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px' }}>
+              <span>1m</span><span>10m</span>
+            </div>
           </div>
-        </div>
 
-        {/* Category Selection */}
-        <div>
-          <label className="block text-lg font-semibold text-gray-800 mb-3">Word Category</label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-lg focus:outline-none focus:border-purple-500"
-          >
-            {getCategoryNames().map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Category */}
+          <div style={{ marginBottom: '32px' }}>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: '10px' }}>
+              Category
+            </label>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+              {categories.map((cat) => (
+                <button key={cat} onClick={() => setCategory(cat)}
+                  style={{
+                    padding: '8px 4px',
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    borderRadius: '8px',
+                    border: category === cat ? '1px solid var(--accent)' : '1px solid var(--border)',
+                    background: category === cat ? 'var(--accent-dim)' : 'var(--surface-2)',
+                    color: category === cat ? 'var(--accent)' : 'var(--text-secondary)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                    letterSpacing: '0.2px',
+                  }}>
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
 
-        {/* Start Button */}
-        <button
-          onClick={handleStart}
-          className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xl font-bold py-4 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg mt-8"
-        >
-          Start Game
-        </button>
+          {/* Start Button */}
+          <button onClick={handleStart}
+            style={{
+              width: '100%',
+              padding: '16px',
+              fontSize: '16px',
+              fontWeight: 600,
+              borderRadius: '12px',
+              border: '1px solid var(--border-strong)',
+              background: 'rgba(255,255,255,0.08)',
+              color: 'var(--text-primary)',
+              cursor: 'pointer',
+              letterSpacing: '0.3px',
+              boxShadow: 'var(--shadow-button)',
+              transition: 'opacity 0.15s ease',
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
+            onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}>
+            Start Game →
+          </button>
+        </div>
       </div>
-
-      <p className="text-center text-gray-600 text-sm mt-6">
-        💡 Tip: Pass the phone to each player in turn to reveal their role.
-      </p>
     </div>
   );
 }
