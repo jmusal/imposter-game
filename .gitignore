@@ -31,9 +31,5 @@ lerna-debug.log*
 # OS
 Thumbs.db
 
-# Wrangler / Cloudflare Workers
-wrangler.jsonc
-wrangler.json
+# Wrangler / Cloudflare Workers (runtime files only)
 .wrangler/
-dist/wrangler.json
-dist/.assetsignore
